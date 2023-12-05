@@ -13,21 +13,27 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
     const root = document.getElementById("root");
-    let counter = 0;
+
     function reRender() {
       // 페이지 렌더 함수 (UI업데이트 함수)
-      ReactDOM.render(<Container />, root);
+      ReactDOM.render(<App />, root);
     }
-    function countUp() {
-      counter = counter + 1;
-      reRender();
+    function App() {
+      const [counter, setCounter] = React.useState(0);
+
+      function onClick() {
+        setCounter(counter + 1);
+      }
+
+      console.log("000");
+      console.log(counter); // rerender
+      return (
+        <div>
+          <h3>Total Clicks: {counter}</h3>
+          <button onClick={onClick}>Click</button>
+        </div>
+      );
     }
-    const Container = () => (
-      <div>
-        <h3>Total Clicks: {counter}</h3>
-        <button onClick={countUp}>Click</button>
-      </div>
-    );
     reRender();
   </script>
 </html>
