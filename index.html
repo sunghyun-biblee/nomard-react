@@ -19,18 +19,54 @@
       ReactDOM.render(<App />, root);
     }
     function App() {
-      const [counter, setCounter] = React.useState(0);
+      // const [counter, setCounter] = React.useState(0);
 
-      function onClick() {
-        setCounter(counter + 1);
+      // function onClick() {
+      //   // setCounter(counter + 1);
+      //   setCounter((current) => current + 1); // current는 현재 useState의 값을 뜻함 >> 사용하는이유 : 클릭이벤트를 발생시킨 props의 useState의 현재값을 정확하게 가르키고있음
+      // }
+
+      //jsx에서 html속성을 쓰면 안되는이유 : for,class가 물론 html 속성이지만 jsx에서는 javascript로 받아들이기때문에 당장 실행에는 문제가없으나 추후 문제발생 가능성 높음
+      // ex) class => className , for => htmlFor로 작성하는 것을 추천
+      const [minutes, setMinutes] = React.useState();
+      const [flip, setFlip] = React.useState(false);
+      const onChange = (event) => {
+        setMinutes(event.target.value);
+        console.log(minutes);
+      };
+      function reset() {
+        setMinutes("");
       }
-
-      console.log("000");
-      console.log(counter); // rerender
+      const flipped = () => {
+        reset();
+        setFlip((current) => !current);
+      };
       return (
         <div>
-          <h3>Total Clicks: {counter}</h3>
-          <button onClick={onClick}>Click</button>
+          <div>
+            <h1>super converter</h1>
+            <label htmlFor="Minutes">Minutes</label>
+            <input
+              id="Minutes"
+              type="number"
+              placeholder="Minutes"
+              value={flip ? minutes * 60 : minutes}
+              onChange={onChange}
+              disabled={flip}
+            />
+            <h4>You want to convert {minutes}</h4>
+            <label htmlFor="Hours">Hours</label>
+            <input
+              value={flip ? minutes : Math.round(minutes / 60)}
+              id="Hours"
+              type="number"
+              placeholder="Hours"
+              disabled={!flip}
+              onChange={onChange}
+            />
+          </div>
+          <button onClick={reset}>reset</button>
+          <button onClick={flipped}>flip</button>
         </div>
       );
     }
