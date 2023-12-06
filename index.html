@@ -18,7 +18,7 @@
       // 페이지 렌더 함수 (UI업데이트 함수)
       ReactDOM.render(<App />, root);
     }
-    function App() {
+    function MinutesToHoures() {
       // const [counter, setCounter] = React.useState(0);
 
       // function onClick() {
@@ -44,7 +44,6 @@
       return (
         <div>
           <div>
-            <h1>super converter</h1>
             <label htmlFor="Minutes">Minutes</label>
             <input
               id="Minutes"
@@ -54,7 +53,7 @@
               onChange={onChange}
               disabled={flip}
             />
-            <h4>You want to convert {minutes}</h4>
+            <br />
             <label htmlFor="Hours">Hours</label>
             <input
               value={flip ? minutes : Math.round(minutes / 60)}
@@ -66,7 +65,76 @@
             />
           </div>
           <button onClick={reset}>reset</button>
-          <button onClick={flipped}>flip</button>
+          <button onClick={flipped}>
+            {flip ? "시간으로 분을 구하는중" : "분으로 시간구하는중"}
+          </button>
+        </div>
+      );
+    }
+    function KmToMiles() {
+      const [miles, setMiles] = React.useState();
+      const [flip, setFlip] = React.useState(true);
+      function onChange(event) {
+        console.log(event.target.value);
+        setMiles(event.target.value);
+      }
+      function reset() {
+        setMiles("");
+      }
+      function flipped() {
+        setFlip((current) => !current);
+        console.log(flip);
+      }
+      return (
+        <div>
+          <label for="Miles">Miles</label>
+          <input
+            id="Miles"
+            type="number"
+            onChange={onChange}
+            placeholder="miles"
+            value={flip ? miles : miles * 1000}
+            disabled={!flip}
+          />
+          <br />
+          <label for="KM">KM</label>
+          <input
+            id="KM"
+            type="number"
+            placeholder="km"
+            value={flip ? miles / 1000 : miles}
+            disabled={flip}
+            onChange={onChange}
+          />
+          <br />
+          <button onClick={reset}>reset</button>
+          <button onClick={flipped}>
+            {flip
+              ? "miles로 km를 구하는중입니다"
+              : "km로 miles를 구하는중입니다."}
+          </button>
+        </div>
+      );
+    }
+    function App() {
+      const [index, setIndex] = React.useState("XX");
+      const onSelect = (event) => {
+        console.log(event.target.value);
+        setIndex(event.target.value);
+      };
+      return (
+        <div>
+          <h1>super converter</h1>
+
+          <select value={index} onChange={onSelect}>
+            <option value="XX">Select your units</option>
+            <option value="0">Minutes & Horus</option>
+            <option value="1">Km & Miles</option>
+          </select>
+          <hr />
+          {index === "XX" ? <h1>Select your units</h1> : null}
+          {index === "0" ? <MinutesToHoures /> : null}
+          {index === "1" ? <KmToMiles /> : null}
         </div>
       );
     }
