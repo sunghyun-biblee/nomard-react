@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const root = document.getElementById("root");
+
+    function reRender() {
+      // 페이지 렌더 함수 (UI업데이트 함수)
+      ReactDOM.render(<App />, root);
+    }
+    function saveBtn() {
+      return (
+        <button
+          style={{
+            backgroundColor: "skyblue",
+            color: "blue",
+            padding: "10px 20px",
+            borderRadius: "10px",
+          }}
+        >
+          save onChange
+        </button>
+      );
+    }
+    function confirmBtn() {
+      return <button>confirm</button>;
+    }
+    function MinutesToHoures() {
+      // const [counter, setCounter] = React.useState(0);
+
+      // function onClick() {
+      //   // setCounter(counter + 1);
+      //   setCounter((current) => current + 1); // current는 현재 useState의 값을 뜻함 >> 사용하는이유 : 클릭이벤트를 발생시킨 props의 useState의 현재값을 정확하게 가르키고있음
+      // }
+
+      //jsx에서 html속성을 쓰면 안되는이유 : for,class가 물론 html 속성이지만 jsx에서는 javascript로 받아들이기때문에 당장 실행에는 문제가없으나 추후 문제발생 가능성 높음
+      // ex) class => className , for => htmlFor로 작성하는 것을 추천
+      const [minutes, setMinutes] = React.useState();
+      const [flip, setFlip] = React.useState(false);
+      const onChange = (event) => {
+        setMinutes(event.target.value);
+        console.log(minutes);
+      };
+      function reset() {
+        setMinutes("");
+      }
+      const flipped = () => {
+        reset();
+        setFlip((current) => !current);
+      };
+      return (
+        <div>
+          <div>
+            <label htmlFor="Minutes">Minutes</label>
+            <input
+              id="Minutes"
+              type="number"
+              placeholder="Minutes"
+              value={flip ? minutes * 60 : minutes}
+              onChange={onChange}
+              disabled={flip}
+            />
+            <br />
+            <label htmlFor="Hours">Hours</label>
+            <input
+              value={flip ? minutes : Math.round(minutes / 60)}
+              id="Hours"
+              type="number"
+              placeholder="Hours"
+              disabled={!flip}
+              onChange={onChange}
+            />
+          </div>
+          <button onClick={reset}>reset</button>
+          <button onClick={flipped}>
+            {flip ? "시간으로 분을 구하는중" : "분으로 시간구하는중"}
+          </button>
+        </div>
+      );
+    }
+    function KmToMiles() {
+      const [miles, setMiles] = React.useState();
+      const [flip, setFlip] = React.useState(true);
+      function onChange(event) {
+        console.log(event.target.value);
+        setMiles(event.target.value);
+      }
+      function reset() {
+        setMiles("");
+      }
+      function flipped() {
+        setFlip((current) => !current);
+        console.log(flip);
+      }
+      return (
+        <div>
+          <label for="Miles">Miles</label>
+          <input
+            id="Miles"
+            type="number"
+            onChange={onChange}
+            placeholder="miles"
+            value={flip ? miles : miles * 1000}
+            disabled={!flip}
+          />
+          <br />
+          <label for="KM">KM</label>
+          <input
+            id="KM"
+            type="number"
+            placeholder="km"
+            value={flip ? miles / 1000 : miles}
+            disabled={flip}
+            onChange={onChange}
+          />
+          <br />
+          <button onClick={reset}>reset</button>
+          <button onClick={flipped}>
+            {flip
+              ? "miles로 km를 구하는중입니다"
+              : "km로 miles를 구하는중입니다."}
+          </button>
+        </div>
+      );
+    }
+    function App() {
+      const [index, setIndex] = React.useState("XX");
+      const onSelect = (event) => {
+        console.log(event.target.value);
+        setIndex(event.target.value);
+      };
+      return (
+        <div>
+          <h1>super converter</h1>
+
+          <select value={index} onChange={onSelect}>
+            <option value="XX">Select your units</option>
+            <option value="0">Minutes & Horus</option>
+            <option value="1">Km & Miles</option>
+          </select>
+          <hr />
+          {index === "XX" ? <h1>Select your units</h1> : null}
+          {index === "0" ? <MinutesToHoures /> : null}
+          {index === "1" ? <KmToMiles /> : null}
+        </div>
+      );
+    }
+    reRender();
+  </script>
+</html>
