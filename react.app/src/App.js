@@ -4,13 +4,13 @@ function App() {
   const buy = (event) => {
     event.preventDefault();
     setSelectbuy(true);
+    console.log(money + "원");
   };
   const selectMoney = (e) => {
     if (e.target.value.length > e.target.maxLength)
       e.target.value = e.target.value.slice(0, e.target.maxLength);
     setSelectbuy(false);
     setMoney(e.target.value);
-    console.log(money);
   };
   const selectCoin = (e) => {
     setSelectbuy(false);
@@ -46,7 +46,7 @@ function App() {
             {coins.map((items, index) => (
               <option key={index} value={items.quotes.USD.price}>
                 {items.name.toUpperCase()} [{items.first_data_at}] price:$
-                {Math.floor(items.quotes.USD.price)}
+                {items.quotes.USD.price.toFixed(2)}
               </option>
             ))}
           </select>
@@ -58,9 +58,7 @@ function App() {
           />
           <p>{money} 원 있습니다</p>
           <button>구매하기</button>
-          {selectbuy ? (
-            <a>구매수량 {parseInt(money / getcoin).toFixed(100)}</a>
-          ) : null}
+          {selectbuy ? <a>구매수량 {(money / getcoin).toFixed(100)}</a> : null}
         </form>
       )}
     </div>
