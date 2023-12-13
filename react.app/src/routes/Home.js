@@ -35,6 +35,7 @@ function Home() {
             <Movie
               // key는 react.js에서 매우 중요
               key={movie.id}
+              id={movie.id}
               //   key는 react.js에서만 , map안에서 component들을 render할때 사용
               coverImg={movie.medium_cover_image}
               title={movie.title}
