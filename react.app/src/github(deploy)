@@ -1,0 +1,58 @@
+github pages에 deploy(배포)하는 방법
+
+1. gh-pages (툴 설치) => npm i gh-pages /터미널에 입력 
+    gh-pages란 결과물을 github pages에 업로드 할 수 있게 해주는 패키지
+    
+    github pages는 github에서 제공하는 무료 서비스 
+    > html,css,js를 올리면 그걸 웹사이트로 만들어서 전세계에 무료로 배포해준다.
+    (좋은 도메인도 가지게 된다)
+
+2. package.json > scripts를 확인
+    package.json > scripts > build 
+    build란 script를 실행하면 우리 웹사이트의 production ready code(생산 준비 코드)를 생성하게 된다.
+
+    production ready code란 코드가 압축되고 모든게 최적화 된다는 의미
+
+    build 실행방법
+    npm run build / 터미널에 입력
+    압축하고 최적화 등 작업을 하기때문에 시간이 조금 걸림
+
+    실행이 되고나면 build 폴더가 생성됨
+    폴더안에는 이상한 js파일이 생기는데 
+    js파일에 코드가 압축되어 들어가있음
+
+3. package.json 파일 마지막부분에 , 적고 "homepage":"https://" 추가
+
+"https://{첫번쨰는 나의github username을 작성}.{두 번째는 github.io 라고 작성}/{세번째는 작성코드가 들어있는 github repository 작성} "
+
+github repository 는 git remote -v 를 통해 확인 가능
+
+ex_ "homepage":"https://sunghyun1014-biblee/github.io/nomard-react"
+
+4. package.json > scripts 안에 "deploy" 추가
+"deploy": "gh-pages -d build" << 작성
+
+deploy가 하는 일은 설치한 gh-pages를 실행시키고 "build"라는 디렉토리를 가져감
+
+원래는 build를 하고 난 다음에 deploy를 해야 함
+> 하지만 이 과정을  기억하고 싶지 않다면  scripts안에 "predeploy"추가
+"predeploy":"npm run build"
+
+"predeploy"를 추가하게되면 "deploy"를 실행시켰을때 "predeploy"가 자동으로 먼저 실행됨
+
+>> 터미널에 npm run deploy를 실행하면 먼저
+"predeploy"가 작동되면서 안에있는 코드인 "npm run build"가"react-scripts build"를 실행 >> 최적화된 파일들을 생성하고 끝이 나면 "gh-pages -d build" 가 실행됨
+
+"gh-pages -d build"가 하는 일은 build폴더를 package.json 에 작성한
+"homepage":"https://" 경로에 웹사이트를 업로드하도록 하는 것
+
+"웹사이트가 업데이트된 것을 볼려면 5분정도 기다려야 함"
+
+ 이후 코드를 수정하고 업데이트하고 싶다면  
+"npm run deploy"만 실행시키면 된다.
+
+그럼 자동으로 프로젝트가 build 되고 최적화된 파일들을 담은 build 폴더가 생기며, 그 폴더가 github pages에 push 된다.
+
+"변화가 바로 반영되지않더라도 조금 기다리면 해결된다. github-pages는 무료서비스이기때문에 업데이트 시간이 걸리는 편"
+
+
