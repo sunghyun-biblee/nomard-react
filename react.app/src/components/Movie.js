@@ -16,7 +16,19 @@ function Movie({ coverImg, title, summary, genres, id }) {
         <a href="/movie">{title}</a>
          a 태그에 movie로 가는 경로를 줘서 사용가능하지만 이렇게 사용하면 홈페이지가 rende된다. react의 장점을 사용못함*/}
       </h2>
-      <p>{summary}</p>
+      <p>
+        {summary.length > 235
+          ? `${summary.slice(0, 235)} ...!!`
+          : summary.length === 0
+          ? "Summary none"
+          : summary}
+      </p>
+      {/* summary는 string이기때문에 array method를 사용할 수 있다.
+        slice():시작값과 끝값이 필요함 
+        ex)summary.slice(0,235) : summary의 문자열을 0부터 235까지 자를것이다
+         글자수가 235개 이상이면 235개까지 자른후 "..."을 작성하여 이후에 문자열이 더 있다는걸 암시하게 만들어줌 , 235 미만일때 summary의 문자열을 공백인지 확인 후 공백이라면 Summary none 을 출력 , 공백이 아니라면 summary값을 출력
+
+      */}
       <ul className={styles.movie__genres}>
         {genres.map((g) => (
           <li key={g}>{g}</li>
