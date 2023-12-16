@@ -4,13 +4,21 @@ import Home from "./routes/home";
 import Profile from "./routes/profile";
 import Login from "./routes/login";
 import Createaccount from "./routes/create-account";
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
+import { useEffect, useState } from "react";
+import LoadingScreen from "./components/loading-screen";
+import { auth } from "./firebase";
+import ProtectedRoute from "./components/protected-route";
 
 const router = createBrowserRouter([
   {
     path: "/", // 루트페이지
-    element: <Layout />,
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     // route에 넣을 또 다른 배열을 만드는 것
     // Outlet 구성 요소가 수행하는 작업 : / profile을 쓰면 layout과 children안에있는 path 가 profile 인 component를 출력 > <Layout/> 과 <Profile /> 차례대로 출력 > 이것이 outlet이 하는 기능 / layout.tsx에 <Outlet />를 <Profile />가 대체
 
@@ -18,7 +26,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Home />,
+        element: <Home></Home>,
       },
       {
         path: "profile",
@@ -51,13 +59,39 @@ const GlobalStyles = createGlobalStyle`
  }
  
 `;
+const Wrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+`;
+
 function App() {
+  const [loading, setLoading] = useState(true);
+  const init = async () => {
+    // wait for firebase
+    // firebase를 기다리기 위해서 await을 시작
+    /*  authStateReady() : 최종 인증 상태가 완료될 때 실행되는 promise를 return 해줌
+        즉,firebase가 쿠키와 토큰을 읽고 백엔드와 소통해서 로그인여부를 확인하는동안 기다리겠다는 
+    */
+
+    await auth.authStateReady();
+
+    setLoading(false);
+    // setTimeout(() => setLoading(false), 2000);
+  };
+  useEffect(() => {
+    init();
+  }, []);
   return (
-    <>
+    <Wrapper>
       <GlobalStyles />
       {/* 위에서 만든 router를 RouterProvide에 전달 */}
-      <RouterProvider router={router} />
-    </>
+      {loading ? ( //loading이 true라면 로딩중이라는 화면을 출력하고 false라면 Router를 이용해 경로맞는 component를 출력한다 > setloading으로 인해 usestate값이 변경되면 rerender 되어 다시 한번 더 조건문을 확인함
+        <LoadingScreen></LoadingScreen>
+      ) : (
+        <RouterProvider router={router} />
+      )}
+    </Wrapper>
   );
 }
 
