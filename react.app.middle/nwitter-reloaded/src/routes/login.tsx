@@ -66,6 +66,7 @@ export default function Createaccount() {
           placeholder="Email"
           type="email"
           required
+          autoComplete="off"
         ></Input>
         <Input
           onChange={onChange}
