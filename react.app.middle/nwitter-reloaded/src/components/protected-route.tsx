@@ -10,7 +10,7 @@ export default function ProtectedRoute({
   children: React.ReactNode;
 }) {
   const user = auth.currentUser; //유저가 로그인했는지 알수있다. 로그인했다면 user 아니면null
-  console.log(user);
+
   if (user === null) {
     //true가 아니면  로그인페이지로 이동
     return <Navigate to="/login" />;
