@@ -116,7 +116,7 @@ export default function PostTweetForm() {
         // ref() 어디에 저장할것인지, 어떤경로에 저장한것인지 작성
         const locationRef = ref(
           storage,
-          `tweets/${user.uid}-${user.displayName}/${doc.id}`
+          `tweets/${user.uid}/${doc.id}`
           //업로드된 파일은 tweets/(유저아이디)/(문서ID)로 가도록 설정
         );
         const result = await uploadBytes(locationRef, file); //파일을 어디에 저장할 것인지,그리고 value
