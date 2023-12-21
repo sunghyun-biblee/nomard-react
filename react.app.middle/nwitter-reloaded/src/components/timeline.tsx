@@ -1,10 +1,4 @@
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { db } from "../firebase";
@@ -24,9 +18,21 @@ const Wrapper = styled.div`
   display: flex;
   gap: 20px;
   flex-direction: column;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #925353;
+    border-radius: 20px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: gray;
+  }
 `;
 export default function Timeline() {
   const [tweets, setTweet] = useState<ITweet[]>([]);
+
   //react에서 이것은 tweets 배열이고, 기본값은 빈 배열이라고 알려줌
 
   useEffect(() => {
