@@ -11,7 +11,9 @@ const Form = styled.form`
   flex-direction: column;
   gap: 10px;
 `;
-const TextArea = styled.textarea`
+export const TextArea = styled.textarea`
+  width: 100%;
+  display: block;
   border: 2px solid white;
   resize: none;
   padding: 20px;
@@ -87,7 +89,6 @@ export default function PostTweetForm() {
       alert(`Please select a file that is ${maxFileSizeInMB}MB or less.`);
       setDisable(true);
     } else {
-      alert("File uploaded successfully!");
       setDisable(false);
     }
   };
@@ -119,9 +120,13 @@ export default function PostTweetForm() {
           `tweets/${user.uid}/${doc.id}`
           //업로드된 파일은 tweets/(유저아이디)/(문서ID)로 가도록 설정
         );
-        const result = await uploadBytes(locationRef, file); //파일을 어디에 저장할 것인지,그리고 value
 
+        const result = await uploadBytes(locationRef, file);
+        //파일을 어디에 저장할 것인지, 그리고 value
         // 이후 업로드한 이미지의 URL을 받아서 doc에 URL정보를 저장하고싶음
+
+        //uploadBytes(ref > locationRef , data > file)
+
         const url = await getDownloadURL(result.ref);
         // getDownloadURL(): firebase/sotrage에서 불러옴 , 해당함수는 result의 퍼블릭 URL을 반환함
 
