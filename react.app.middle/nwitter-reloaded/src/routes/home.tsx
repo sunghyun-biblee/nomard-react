@@ -12,6 +12,9 @@ const Wrapper = styled.div`
   overflow-y: scroll;
   // 게시글 작성 양식은 그대로 고정되어 있는 상태에서 트윗들을 스크롤 할 수 있게
   grid-template-rows: 1fr 5fr;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 export default function Home() {
   const navigate = useNavigate();
