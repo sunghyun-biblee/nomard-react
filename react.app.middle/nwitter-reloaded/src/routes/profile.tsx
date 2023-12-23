@@ -5,10 +5,12 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import {
   collection,
+  doc,
   getDocs,
   limit,
   orderBy,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { ITweet } from "../components/timeline";
@@ -43,6 +45,7 @@ const AvatarInput = styled.input`
 `;
 const Name = styled.span`
   font-size: 22px;
+  display: block;
 `;
 const Tweets = styled.div`
   width: 100%;
@@ -51,10 +54,29 @@ const Tweets = styled.div`
   gap: 10px;
   padding-right: 10px;
 `;
+const EditName = styled.button`
+  padding: 0 10px;
+  border-radius: 10px;
+  margin-left: 10px;
+  display: block;
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+`;
+
+const ProfileInfo = styled.div`
+  display: flex;
+`;
+const NameEditInput = styled.input``;
 export default function Profile() {
   const user = auth.currentUser;
   const [avatar, setAvatar] = useState(user?.photoURL);
   const [tweets, setTweets] = useState<ITweet[]>([]);
+  const [editmode, setEditmode] = useState(false);
+  const [profileusername, setUsername] = useState(user?.displayName);
+  const [loading, setLoading] = useState(false);
+
   const onAvatarChage = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
     // 파일이 선택된 태그의 정보
@@ -80,6 +102,35 @@ export default function Profile() {
       setAvatar(avatarUrl);
       // 유저이미지를 <AvatarImg src={avatar} /> 해당 컴포넌트에 출력하기때문에 사진이 변경되면 setAvatar를 해주어 변경된 avatar의 사진을 보여줌
       await updateProfile(user, { photoURL: avatarUrl });
+    }
+  };
+  const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { value },
+    } = event;
+    setUsername(value);
+  };
+  const onEdit = async () => {
+    const collectionRef = collection(db, "tweets");
+
+    const querySnapshot = await getDocs(collectionRef);
+    setEditmode((mode) => !mode);
+    console.log(user?.uid);
+    console.log(tweets[0].userId);
+    if (!editmode) return;
+
+    try {
+      setLoading(true);
+      if (user) {
+        await updateProfile(user, { displayName: profileusername });
+        await querySnapshot.forEach(async (doc) => {
+          console.log(doc.ref.parent);
+          await updateDoc(doc.ref, { username: profileusername });
+        });
+      }
+    } catch (error) {
+    } finally {
+      setEditmode(false);
     }
   };
   const fetchTweets = async () => {
@@ -137,10 +188,24 @@ export default function Profile() {
         type="file"
         accept="image/*"
       />
-      <Name>
-        {/* {user?.displayName?user.displayName:"Anonymous"} */}
-        {user?.displayName ?? "Anonymous"}
-      </Name>
+      <ProfileInfo>
+        {!editmode ? (
+          <Name>
+            {/* {user?.displayName?user.displayName:"Anonymous"} */}
+            {user?.displayName ?? "Anonymous"}
+          </Name>
+        ) : (
+          <NameEditInput
+            type="text"
+            placeholder={user?.displayName ?? "Anonymous"}
+            onChange={onNameChange}
+          />
+        )}
+
+        <EditName onClick={onEdit}>
+          {!editmode ? "EDIT" : loading ? "SAVEING..." : "SAVE"}
+        </EditName>
+      </ProfileInfo>
       <Tweets>
         {tweets.map((tweet) => (
           <Tweet key={tweet.id} {...tweet} />
