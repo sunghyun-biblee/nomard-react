@@ -42,7 +42,7 @@ const Menuitem = styled.div`
 export default function Layout() {
   const navigate = useNavigate();
   const onLogout = async () => {
-    const test = confirm("로그아웃할 거니?"); // 로그아웃하기전에 확인창
+    const test = confirm("로그아웃 하시겠습니까?"); // 로그아웃하기전에 확인창
     if (test) {
       await auth.signOut();
       navigate("/login"); // 결과값을 반환하면 useNavigate 를 사용하여 페이지이동
