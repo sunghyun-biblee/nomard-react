@@ -1,8 +1,4 @@
-import {
-  GithubAuthProvider,
-  signInWithPopup,
-  signInWithRedirect,
-} from "firebase/auth";
+import { GithubAuthProvider, signInWithRedirect } from "firebase/auth";
 import styled from "styled-components";
 import { auth } from "../firebase";
 const Button = styled.span`

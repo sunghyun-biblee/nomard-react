@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
 import PostTweetForm from "../components/post-tweet-form";
 import styled from "styled-components";
 import Timeline from "../components/timeline";
@@ -17,11 +15,11 @@ const Wrapper = styled.div`
   }
 `;
 export default function Home() {
-  const navigate = useNavigate();
-  const logout = () => {
-    auth.signOut();
-    navigate("/login");
-  };
+  // const navigate = useNavigate();
+  // const logout = () => {
+  //   auth.signOut();
+  //   navigate("/login");
+  // };
   return (
     <>
       <Wrapper>

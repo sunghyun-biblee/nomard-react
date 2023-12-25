@@ -5,7 +5,6 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import {
   collection,
-  doc,
   getDocs,
   limit,
   orderBy,
@@ -156,6 +155,7 @@ export default function Profile() {
     });
     setTweets(tweets);
   };
+
   useEffect(() => {
     fetchTweets();
   }, []);

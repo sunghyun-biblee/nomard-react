@@ -2,9 +2,7 @@ import { addDoc, collection, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import styled from "styled-components";
 import { auth, db, storage } from "../firebase";
-import { useNavigate } from "react-router-dom";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { update } from "firebase/database";
 
 const Form = styled.form`
   display: flex;
@@ -60,7 +58,6 @@ const SubmitBtn = styled.input`
 `;
 
 export default function PostTweetForm() {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [tweet, setTweet] = useState("");
   const [file, setFile] = useState<File | null>(null);
